@@ -46,11 +46,11 @@ Take a look at these [informational slides](https://docs.google.com/presentation
 ## Section 5: Typescript web frontend
 1.  Edit the `WORKSPACE` to uncomment the typescript relevant portions
 1.  Edit the `BUILD` file for `logger.proto`
-    - [`ts_proto_library` documentation](https://www.npmjs.com/package/@bazel/typescript#ts_proto_library)
+    - [`ts_proto_library` documentation](???)
 1.  Edit the `BUILD` file for `app.ts`
-    - [`ts_library` usage example](https://www.npmjs.com/package/@bazel/typescript#compiling-typescript-ts_library) and        [`ts_library` documentation](https://www.npmjs.com/package/@bazel/typescript#ts_library)
+    - [`ts_project` usage examples](https://github.com/aspect-build/rules_ts/tree/main/examples) and [`ts_project` documentation](https://github.com/aspect-build/rules_ts/blob/main/docs/rules.md#ts_project)
 1.  Run the webserver using `bazel run`. It will print out a link which you can click on.
-    If the link doesn't work, go to http://localhost:8080 instead
+    To get a watch mode, run `npm install -g @bazel/ibazel` and then replace `bazel` with `ibazel` in the command.
 1.  Run the Go server and Java client from the previous steps. Send messages from the Java
     client to the Go server and see them appear on the web frontend
     

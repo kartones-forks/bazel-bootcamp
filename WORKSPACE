@@ -67,24 +67,43 @@ go_repository(
 
 # BEGIN: typescript dependencies
 http_archive(
-    name = "build_bazel_rules_nodejs",
-    urls = [
-        "https://github.com/bazelbuild/rules_nodejs/releases/download/0.35.0/rules_nodejs-0.35.0.tar.gz",
-    ],
-    sha256 = "6625259f9f77ef90d795d20df1d0385d9b3ce63b6619325f702b6358abb4ab33",
+    name = "aspect_rules_js",
+    sha256 = "6eaac9e07c6cac8d577fca0cd5362ca750ca5c60d20facac864ae358f39612a2",
+    strip_prefix = "rules_js-1.6.7",
+    url = "https://github.com/aspect-build/rules_js/archive/refs/tags/v1.6.7.tar.gz",
 )
 
-load("@build_bazel_rules_nodejs//:defs.bzl", "node_repositories", "yarn_install")
+load("@aspect_rules_js//js:repositories.bzl", "rules_js_dependencies")
 
-yarn_install(
+rules_js_dependencies()
+
+load("@rules_nodejs//nodejs:repositories.bzl", "DEFAULT_NODE_VERSION", "nodejs_register_toolchains")
+
+nodejs_register_toolchains(
+    name = "nodejs",
+    node_version = DEFAULT_NODE_VERSION,
+)
+
+load("@aspect_rules_js//npm:npm_import.bzl", "npm_translate_lock")
+
+npm_translate_lock(
     name = "npm",
-    package_json = "//typescript:package.json",
-    yarn_lock = "//typescript:yarn.lock",
+    pnpm_lock = "//typescript:pnpm-lock.yaml",
+    verify_node_modules_ignored = "//:.bazelignore",
 )
 
-load("@npm//:install_bazel_dependencies.bzl", "install_bazel_dependencies")
-install_bazel_dependencies()
+load("@npm//:repositories.bzl", "npm_repositories")
 
-load("@npm_bazel_typescript//:index.bzl", "ts_setup_workspace")
-ts_setup_workspace()
-# END: typescript dependencies
+npm_repositories()
+
+http_archive(
+    name = "aspect_rules_ts",
+    sha256 = "1149d4cf7f210de67e0fc5cd3e8f624de3ee976ac05af4f1484e57a74c12f2dc",
+    strip_prefix = "rules_ts-1.0.0-rc5",
+    url = "https://github.com/aspect-build/rules_ts/archive/refs/tags/v1.0.0-rc5.tar.gz",
+)
+
+load("@aspect_rules_ts//ts:repositories.bzl", "rules_ts_dependencies")
+
+rules_ts_dependencies(ts_version_from = "//typescript:package.json")
+# END: Typescript dependencies
