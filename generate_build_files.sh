@@ -6,23 +6,6 @@
 
 # generate Go BUILD file
 
-cat > go/cmd/server/BUILD <<EOF
-load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
-
-go_binary(
-    name = "go-server",
-    srcs = ["server.go"],
-    deps = [
-        "//proto/logger:logger_go_proto",
-        "@com_github_golang_protobuf//jsonpb:go_default_library_gen",
-        "@org_golang_google_grpc//:go_default_library",
-        "@org_golang_google_grpc//reflection:go_default_library",
-    ],
-    visibility = ["//visibility:public"]
-)
-EOF
-
-
 # generate java BUILD file
 cat > java/src/main/java/bazel/bootcamp/BUILD <<EOF
 java_binary(
@@ -68,19 +51,10 @@ cat > proto/logger/BUILD <<EOF
 package(default_visibility = ["//visibility:public"])
 
 load("@io_grpc_grpc_java//:java_grpc_library.bzl", "java_grpc_library")
-load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
-load("@npm_bazel_typescript//:index.bzl", "ts_proto_library")
 
 proto_library(
     name = "logger_proto",
     srcs = ["logger.proto"]
-)
-
-go_proto_library(
-    name = "logger_go_proto",
-    proto = ":logger_proto",
-    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
-    importpath = "bootcamp/proto/logger"
 )
 
 java_proto_library(
@@ -93,11 +67,6 @@ java_grpc_library(
     srcs = [":logger_proto"],
     deps = [":logger_java_proto"],
 )
-
-ts_proto_library(
-    name = "logger_ts_proto",
-    deps = [":logger_proto"]
-)
 EOF
 
 
@@ -107,7 +76,7 @@ sh_test(
     name = "integration_test",
     srcs = ["integrationtest.sh"],
     data = [
-        "//go/cmd/server:go-server",
+        "//go/cmd/server",
         "//java/src/main/java/bazel/bootcamp:JavaLoggingClient",
     ],
     tags = ["exclusive"]
@@ -140,3 +109,5 @@ EOF
 
 # write WORKSPACE file
 ${SHELL} ./generate_workspace.sh
+
+bazel run //:gazelle

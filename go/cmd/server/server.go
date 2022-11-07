@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/golang/protobuf/jsonpb"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/grpc"
 	// TODO(dannark): change to "github.com/dkelmer/bootcamp/proto/greeter" when moved
 	pb "bootcamp/proto/logger"
@@ -55,9 +55,8 @@ func saveLogMessage(lm pb.LogMessage) {
 }
 
 func writeToFile(lm pb.LogMessage) {
-	m := jsonpb.Marshaler{}
-	js, _ := m.MarshalToString(&lm)
-	err := ioutil.WriteFile("/tmp/bootcamp_server_last_message.txt", []byte(js), 0644)
+	js, _ := protojson.Marshal(&lm)
+	err := ioutil.WriteFile("/tmp/bootcamp_server_last_message.txt", js, 0644)
 	if err != nil {
         panic(err)
     }
@@ -87,15 +86,14 @@ func createJSONResponse() string {
 
 	s := ""
 	if len(lms) > 0 {
-		m := jsonpb.Marshaler{}
 		s = "["
 		for _, lm := range lms {
 			// TODO(dannark): Use m.Marshal(w, pb) to Marshall into json object
 			// then put those objects in a list and then send the list??
 
 			// marshal current element to json string
-			js, _ := m.MarshalToString(&lm)
-			s += js
+			js, _ := protojson.Marshal(&lm)
+			s += string(js)
 			s += ", "
 		}
 		// remove trailing comma
