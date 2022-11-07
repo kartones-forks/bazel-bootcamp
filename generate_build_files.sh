@@ -3,9 +3,6 @@
 # You can use it to see the final solutions but note that it will delete your existing
 # BUILD files if you started working.
 
-
-# generate Go BUILD file
-
 # generate java BUILD file
 cat > java/src/main/java/bazel/bootcamp/BUILD <<EOF
 java_binary(
@@ -79,7 +76,6 @@ sh_test(
         "//go/cmd/server",
         "//java/src/main/java/bazel/bootcamp:JavaLoggingClient",
     ],
-    tags = ["exclusive"]
 )
 EOF
 
