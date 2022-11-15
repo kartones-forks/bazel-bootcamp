@@ -36,17 +36,6 @@ Take a look at these [informational slides](https://docs.google.com/presentation
 1.  Edit the `BUILD` file for `JavaLoggingClientTest.java`
 1.  Run the tests using `bazel test`
 
-## Section 5: Typescript web frontend
-1.  Edit the `WORKSPACE` to uncomment the typescript relevant portions
-1.  Edit the `BUILD` file for `logger.proto`
-    - [`ts_proto_library` documentation](???)
-1.  Edit the `BUILD` file for `app.ts`
-    - [`ts_project` usage examples](https://github.com/aspect-build/rules_ts/tree/main/examples) and [`ts_project` documentation](https://github.com/aspect-build/rules_ts/blob/main/docs/rules.md#ts_project)
-1.  Run the webserver using `bazel run`. It will print out a link which you can click on.
-    To get a watch mode, run `npm install -g @bazel/ibazel` and then replace `bazel` with `ibazel` in the command.
-1.  Run the Go server and Java client from the previous steps. Send messages from the Java
-    client to the Go server and see them appear on the web frontend
-    
 ## Section 6: Integration test
 1.  Edit the `BUILD` file for `integrationtest.sh`
     - [`sh_test` documentation](https://docs.bazel.build/versions/master/be/shell.html#sh_test)
