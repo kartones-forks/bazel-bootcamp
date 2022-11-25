@@ -7,7 +7,6 @@ option java_outer_classname = "GreeterProto";
 // moved
 option go_package = "bootcamp/proto/logger";
 
-// TODO(dannark): why does typescript fail when package is set?
 // package logger;
 
 service Logger {
